@@ -4,14 +4,13 @@ import SwiftData
 struct DataSettingsView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Profile.name) private var allProfiles: [Profile]
-    @State private var showingExportShare = false
-    @State private var showingHTMLShare = false
     @State private var showingImportPicker = false
     @State private var showingImportConfirm = false
     @State private var showingResult = false
     @State private var resultMessage = ""
     @State private var resultIsError = false
-    @State private var exportFileURL: URL?
+    @State private var jsonExportURL: URL?
+    @State private var htmlExportURL: URL?
     @State private var pendingImportURL: URL?
 
     private var archivedProfiles: [Profile] {
@@ -48,12 +47,19 @@ struct DataSettingsView: View {
                 Button {
                     exportJSON()
                 } label: {
-                    Label("Export as JSON", systemImage: "doc.text")
+                    Label(jsonExportURL == nil ? "Export as JSON" : "Re-Export as JSON", systemImage: "doc.text")
                 }
+                if let url = jsonExportURL {
+                    ShareLink("Share JSON Backup", item: url)
+                }
+
                 Button {
                     exportHTML()
                 } label: {
-                    Label("Export as HTML", systemImage: "safari")
+                    Label(htmlExportURL == nil ? "Export as HTML" : "Re-Export as HTML", systemImage: "safari")
+                }
+                if let url = htmlExportURL {
+                    ShareLink("Share HTML Export", item: url)
                 }
             } header: {
                 Text("Export")
@@ -75,16 +81,6 @@ struct DataSettingsView: View {
         }
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
-        .sheet(isPresented: $showingExportShare) {
-            if let url = exportFileURL {
-                ShareSheet(url: url)
-            }
-        }
-        .sheet(isPresented: $showingHTMLShare) {
-            if let url = exportFileURL {
-                ShareSheet(url: url)
-            }
-        }
         .fileImporter(
             isPresented: $showingImportPicker,
             allowedContentTypes: [.json],
@@ -113,8 +109,10 @@ struct DataSettingsView: View {
             let fileName = "DayMark-Backup-\(formatter.string(from: Date())).json"
             let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
             try data.write(to: tempURL)
-            exportFileURL = tempURL
-            showingExportShare = true
+            jsonExportURL = tempURL
+            resultMessage = "JSON export ready! Tap \"Share JSON Backup\" to save or send."
+            resultIsError = false
+            showingResult = true
         } catch {
             resultMessage = "Failed to export: \(error.localizedDescription)"
             resultIsError = true
@@ -130,8 +128,10 @@ struct DataSettingsView: View {
             let fileName = "DayMark-Export-\(formatter.string(from: Date())).html"
             let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
             try data.write(to: tempURL)
-            exportFileURL = tempURL
-            showingHTMLShare = true
+            htmlExportURL = tempURL
+            resultMessage = "HTML export ready! Tap \"Share HTML Export\" to save or send."
+            resultIsError = false
+            showingResult = true
         } catch {
             resultMessage = "Failed to export: \(error.localizedDescription)"
             resultIsError = true
@@ -172,14 +172,4 @@ struct DataSettingsView: View {
         }
         pendingImportURL = nil
     }
-}
-
-struct ShareSheet: UIViewControllerRepresentable {
-    let url: URL
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: [url], applicationActivities: nil)
-    }
-
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
