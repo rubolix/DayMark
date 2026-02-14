@@ -7,7 +7,7 @@ final class Profile {
     var emoji: String
     var colorHex: String
     var createdAt: Date
-    var isArchived: Bool
+    var isArchived: Bool = false
     @Attribute(.externalStorage) var photoData: Data?
 
     @Relationship(deleteRule: .cascade, inverse: \Tracker.profile)
