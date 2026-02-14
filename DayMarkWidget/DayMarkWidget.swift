@@ -54,7 +54,7 @@ struct CountTrackerProvider: AppIntentTimelineProvider {
             )
         }
 
-        let context = ModelContext(SharedModelContainer.container)
+        let context = SharedModelContainer.newContext()
         let descriptor = FetchDescriptor<Tracker>()
         let trackers = (try? context.fetch(descriptor)) ?? []
 

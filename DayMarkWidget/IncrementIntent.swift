@@ -17,7 +17,7 @@ struct IncrementTrackerIntent: AppIntent {
     }
 
     func perform() async throws -> some IntentResult & ReturnsValue<Bool> {
-        let context = ModelContext(SharedModelContainer.container)
+        let context = SharedModelContainer.newContext()
         let descriptor = FetchDescriptor<Tracker>()
         let trackers = (try? context.fetch(descriptor)) ?? []
 

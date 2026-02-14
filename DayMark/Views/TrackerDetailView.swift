@@ -9,7 +9,7 @@ enum ChartPeriod: String, CaseIterable {
 }
 
 struct TrackerDetailView: View {
-    let tracker: Tracker
+    @Bindable var tracker: Tracker
     @Environment(\.modelContext) private var modelContext
     @State private var showingLogEntry = false
     @State private var showingEditTracker = false
@@ -17,6 +17,7 @@ struct TrackerDetailView: View {
     @State private var chartPeriod: ChartPeriod = .week
     @State private var customStart = Calendar.current.date(byAdding: .month, value: -1, to: Date())!
     @State private var customEnd = Date()
+    @State private var refreshID = UUID()
 
     var filteredEntries: [Entry] {
         let cal = Calendar.current
@@ -167,6 +168,7 @@ struct TrackerDetailView: View {
         }
         .navigationTitle(tracker.name)
         .navigationBarTitleDisplayMode(.large)
+        .id(refreshID)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Menu {
@@ -199,12 +201,15 @@ struct TrackerDetailView: View {
         }
         .sheet(isPresented: $showingLogEntry) {
             LogEntryView(tracker: tracker)
+                .onDisappear { refreshID = UUID() }
         }
         .sheet(isPresented: $showingEditTracker) {
             EditTrackerView(tracker: tracker)
+                .onDisappear { refreshID = UUID() }
         }
         .sheet(item: $selectedEntry) { entry in
             EditEntryView(entry: entry, tracker: tracker)
+                .onDisappear { refreshID = UUID() }
         }
     }
 

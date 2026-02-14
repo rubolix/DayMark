@@ -4,6 +4,7 @@ import Foundation
 struct SharedModelContainer {
     static let appGroupIdentifier = "group.com.rubolix.DayMark"
 
+    @MainActor
     static var container: ModelContainer = {
         let schema = Schema([Profile.self, Tracker.self, Entry.self])
         let config: ModelConfiguration
@@ -19,4 +20,22 @@ struct SharedModelContainer {
             fatalError("Failed to create ModelContainer: \(error)")
         }
     }()
+
+    /// Create a fresh ModelContext for use in widget/intent (separate process)
+    static func newContext() -> ModelContext {
+        let schema = Schema([Profile.self, Tracker.self, Entry.self])
+        let config: ModelConfiguration
+        if let groupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier) {
+            let storeURL = groupURL.appendingPathComponent("DayMark.store")
+            config = ModelConfiguration("DayMark", schema: schema, url: storeURL)
+        } else {
+            config = ModelConfiguration(schema: schema)
+        }
+        do {
+            let container = try ModelContainer(for: schema, configurations: [config])
+            return ModelContext(container)
+        } catch {
+            fatalError("Failed to create ModelContainer: \(error)")
+        }
+    }
 }

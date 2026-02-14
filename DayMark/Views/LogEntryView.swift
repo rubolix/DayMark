@@ -1,4 +1,5 @@
 import SwiftUI
+import WidgetKit
 
 struct LogEntryView: View {
     let tracker: Tracker
@@ -149,6 +150,7 @@ struct LogEntryView: View {
         let entry = Entry(date: date, value: value, note: composedNote)
         entry.tracker = tracker
         modelContext.insert(entry)
+        WidgetCenter.shared.reloadAllTimelines()
         dismiss()
     }
 }
