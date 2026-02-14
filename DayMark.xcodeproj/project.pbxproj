@@ -28,7 +28,44 @@
 		D4E5F6A7B8C9401123DE4567 /* ReminderSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D4E5F6A7B8490012CD3456 /* ReminderSection.swift */; };
 		F8A9B0C1D2E3F4A5B6078901 /* ProfileIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F8A9B0C1D2E3F4A5B60789 /* ProfileIcon.swift */; };
 		2A1C7D9FA1DA46E0AADAEACD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76C70FC1299345B5ADDD5004 /* Assets.xcassets */; };
+		W10000000002A0000000001 /* DayMarkWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = W10000000001A0000000001 /* DayMarkWidget.swift */; };
+		W10000000002A0000000002 /* DayMarkWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = W10000000001A0000000002 /* DayMarkWidgetBundle.swift */; };
+		W10000000002A0000000003 /* IncrementIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = W10000000001A0000000003 /* IncrementIntent.swift */; };
+		W10000000002A0000000004 /* SelectTrackerIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = W10000000001A0000000004 /* SelectTrackerIntent.swift */; };
+		W10000000002A0000000005 /* SharedModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = W10000000001A0000000007 /* SharedModelContainer.swift */; };
+		W10000000002A0000000006 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF418F58556344AE823249A6 /* Profile.swift */; };
+		W10000000002A0000000007 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30412414FDBD406A8D64E3E6 /* Tracker.swift */; };
+		W10000000002A0000000008 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADDD45626DF4DE9B2F02A9A /* Entry.swift */; };
+		W10000000002A0000000009 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06431277E7C84EDB9AD34D47 /* ColorExtensions.swift */; };
+		W10000000002A000000000A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = W10000000001A0000000005 /* Assets.xcassets */; };
+		W10000000002A000000000B /* SharedModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = W10000000001A0000000007 /* SharedModelContainer.swift */; };
+		W10000000002A000000000C /* DayMarkWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = W10000000001A0000000006 /* DayMarkWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+
+/* Begin PBXContainerItemProxy section */
+		W10000000007A0000000002 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EDA8A9780F4841F69CE5CF3A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = W10000000005A0000000001;
+			remoteInfo = DayMarkWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		W10000000004A0000000004 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				W10000000002A000000000C /* DayMarkWidget.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		D5D5F9421E8942329AA1A4C8 /* DayMark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DayMark.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,10 +90,26 @@
 		A1B2C3D4E5F6478990AB1234 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		C3D4E5F6A7B8490012CD3456 /* ReminderSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderSection.swift; sourceTree = "<group>"; };
 		E7F8A9B0C1D2E3F4A5B60789 /* ProfileIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileIcon.swift; sourceTree = "<group>"; };
+		W10000000001A0000000001 /* DayMarkWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayMarkWidget.swift; sourceTree = "<group>"; };
+		W10000000001A0000000002 /* DayMarkWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayMarkWidgetBundle.swift; sourceTree = "<group>"; };
+		W10000000001A0000000003 /* IncrementIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncrementIntent.swift; sourceTree = "<group>"; };
+		W10000000001A0000000004 /* SelectTrackerIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTrackerIntent.swift; sourceTree = "<group>"; };
+		W10000000001A0000000005 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		W10000000001A0000000006 /* DayMarkWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DayMarkWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		W10000000001A0000000007 /* SharedModelContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedModelContainer.swift; sourceTree = "<group>"; };
+		W10000000001A0000000008 /* DayMarkWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DayMarkWidget.entitlements; sourceTree = "<group>"; };
+		W10000000001A0000000009 /* DayMark.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DayMark.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		7DAE9C248DE047B68C0A71C6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W10000000004A0000000002 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -70,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				07D8A7EB5CA548249F8A0FB7 /* DayMark */,
+				W10000000003A0000000001 /* DayMarkWidget */,
 				634345B05B2546B48F1534DE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -78,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				D5D5F9421E8942329AA1A4C8 /* DayMark.app */,
+				W10000000001A0000000006 /* DayMarkWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -86,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				74DC0A89C18C47198CC8B26E /* DayMarkApp.swift */,
+				W10000000001A0000000009 /* DayMark.entitlements */,
 				76C70FC1299345B5ADDD5004 /* Assets.xcassets */,
 				B570FB69D2BD409486406214 /* Models */,
 				01EB48F516F541839AD0E24C /* Utilities */,
@@ -110,6 +166,7 @@
 				06431277E7C84EDB9AD34D47 /* ColorExtensions.swift */,
 				5002FCD93DB14216AE0307C1 /* DataManager.swift */,
 				A1B2C3D4E5F6478990AB1234 /* NotificationManager.swift */,
+				W10000000001A0000000007 /* SharedModelContainer.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -142,6 +199,19 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		W10000000003A0000000001 /* DayMarkWidget */ = {
+			isa = PBXGroup;
+			children = (
+				W10000000001A0000000001 /* DayMarkWidget.swift */,
+				W10000000001A0000000002 /* DayMarkWidgetBundle.swift */,
+				W10000000001A0000000003 /* IncrementIntent.swift */,
+				W10000000001A0000000004 /* SelectTrackerIntent.swift */,
+				W10000000001A0000000008 /* DayMarkWidget.entitlements */,
+				W10000000001A0000000005 /* Assets.xcassets */,
+			);
+			path = DayMarkWidget;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -152,15 +222,34 @@
 				7C341C93EEC74F56AF932C25 /* Sources */,
 				7DAE9C248DE047B68C0A71C6 /* Frameworks */,
 				D44A323C3A5140568E9D57B3 /* Resources */,
+				W10000000004A0000000004 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				W10000000007A0000000001 /* PBXTargetDependency */,
 			);
 			name = DayMark;
 			productName = DayMark;
 			productReference = D5D5F9421E8942329AA1A4C8 /* DayMark.app */;
 			productType = "com.apple.product-type.application";
+		};
+		W10000000005A0000000001 /* DayMarkWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = W10000000006A0000000003 /* Build configuration list for PBXNativeTarget "DayMarkWidget" */;
+			buildPhases = (
+				W10000000004A0000000001 /* Sources */,
+				W10000000004A0000000002 /* Frameworks */,
+				W10000000004A0000000003 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DayMarkWidget;
+			productName = DayMarkWidget;
+			productReference = W10000000001A0000000006 /* DayMarkWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -181,6 +270,7 @@
 			projectRoot = "";
 			targets = (
 				63BA27FA1A1447C69FF44819 /* DayMark */,
+				W10000000005A0000000001 /* DayMarkWidget */,
 			);
 		};
 /* End PBXProject section */
@@ -191,6 +281,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A1C7D9FA1DA46E0AADAEACD /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W10000000004A0000000003 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				W10000000002A000000000A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,10 +319,36 @@
 				B2C3D4E5F6A7489901BC2345 /* NotificationManager.swift in Sources */,
 				D4E5F6A7B8C9401123DE4567 /* ReminderSection.swift in Sources */,
 				F8A9B0C1D2E3F4A5B6078901 /* ProfileIcon.swift in Sources */,
+				W10000000002A000000000B /* SharedModelContainer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W10000000004A0000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				W10000000002A0000000001 /* DayMarkWidget.swift in Sources */,
+				W10000000002A0000000002 /* DayMarkWidgetBundle.swift in Sources */,
+				W10000000002A0000000003 /* IncrementIntent.swift in Sources */,
+				W10000000002A0000000004 /* SelectTrackerIntent.swift in Sources */,
+				W10000000002A0000000005 /* SharedModelContainer.swift in Sources */,
+				W10000000002A0000000006 /* Profile.swift in Sources */,
+				W10000000002A0000000007 /* Tracker.swift in Sources */,
+				W10000000002A0000000008 /* Entry.swift in Sources */,
+				W10000000002A0000000009 /* ColorExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+
+/* Begin PBXTargetDependency section */
+		W10000000007A0000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = W10000000005A0000000001 /* DayMarkWidget */;
+			targetProxy = W10000000007A0000000002 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		DB243B75019148E08558F477 /* Debug */ = {
@@ -323,6 +447,64 @@
 			};
 			name = Release;
 		};
+				W10000000006A0000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = DayMarkWidget/DayMarkWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6NP9249SPC;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DayMarkWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DayMarkWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rubolix.DayMark.Widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+				W10000000006A0000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = DayMarkWidget/DayMarkWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6NP9249SPC;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DayMarkWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DayMarkWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rubolix.DayMark.Widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -340,6 +522,15 @@
 			buildConfigurations = (
 				3616ECEC12754F9582DC0055 /* Debug */,
 				A84663658BE34A0EA00D957B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		W10000000006A0000000003 /* Build configuration list for PBXNativeTarget "DayMarkWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				W10000000006A0000000001 /* Debug */,
+				W10000000006A0000000002 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

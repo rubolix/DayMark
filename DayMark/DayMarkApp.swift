@@ -7,6 +7,6 @@ struct DayMarkApp: App {
         WindowGroup {
             DashboardView()
         }
-        .modelContainer(for: [Profile.self, Tracker.self, Entry.self])
+        .modelContainer(SharedModelContainer.container)
     }
 }
