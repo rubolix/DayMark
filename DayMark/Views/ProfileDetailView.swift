@@ -93,6 +93,17 @@ struct ProfileDetailView: View {
 struct TrackerListRow: View {
     let tracker: Tracker
 
+    private var todayTotal: String {
+        let cal = Calendar.current
+        let today = cal.startOfDay(for: Date())
+        let todayEntries = tracker.entries.filter { cal.isDate($0.date, inSameDayAs: today) }
+        let sum = Int(todayEntries.reduce(0) { $0 + $1.value })
+        if tracker.unit.isEmpty {
+            return "\(sum) today"
+        }
+        return "\(sum) \(tracker.unit) today"
+    }
+
     var body: some View {
         HStack {
             Circle()
@@ -115,8 +126,12 @@ struct TrackerListRow: View {
                     .padding(.vertical, 2)
                     .background(.orange.opacity(0.15))
                     .clipShape(Capsule())
+            } else if tracker.type == .count {
+                Text(todayTotal)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
             } else {
-                Text("\(tracker.entries.count)")
+                Text("\(tracker.entries.count) entries")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }

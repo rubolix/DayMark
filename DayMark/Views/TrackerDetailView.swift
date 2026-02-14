@@ -20,13 +20,24 @@ struct TrackerDetailView: View {
     @Bindable var tracker: Tracker
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
+    @Query private var allEntries: [Entry]
     @State private var showingLogEntry = false
     @State private var showingEditTracker = false
     @State private var selectedEntry: Entry?
     @State private var chartPeriod: ChartPeriod = .week
     @State private var customStart = Calendar.current.date(byAdding: .month, value: -1, to: Date())!
     @State private var customEnd = Date()
-    @State private var refreshID = UUID()
+
+    init(tracker: Tracker) {
+        self._tracker = Bindable(tracker)
+        // @Query fetches all entries; we filter to this tracker in computed properties
+        self._allEntries = Query(sort: \Entry.date, order: .reverse)
+    }
+
+    /// All entries belonging to this tracker
+    private var trackerEntries: [Entry] {
+        allEntries.filter { $0.tracker?.id == tracker.id }
+    }
 
     private var dateRange: (start: Date, end: Date) {
         let cal = Calendar.current
@@ -43,13 +54,12 @@ struct TrackerDetailView: View {
         }
     }
 
-    var filteredEntries: [Entry] {
+    private var filteredEntries: [Entry] {
         let range = dateRange
-        return tracker.sortedEntries.filter { $0.date >= range.start && $0.date <= range.end }
+        return trackerEntries.filter { $0.date >= range.start && $0.date <= range.end }
     }
 
-    /// Aggregate entries by day, summing values for count trackers
-    var dailyAggregates: [DailyAggregate] {
+    private var dailyAggregates: [DailyAggregate] {
         let cal = Calendar.current
         var grouped: [Date: Double] = [:]
         for entry in filteredEntries {
@@ -151,7 +161,23 @@ struct TrackerDetailView: View {
                 }
             }
 
-            if tracker.type == .scale || tracker.type == .count {
+            if tracker.type == .count {
+                Section("Daily Stats") {
+                    let aggs = dailyAggregates
+                    if !aggs.isEmpty {
+                        let dailyValues = aggs.map(\.value)
+                        let total = Int(dailyValues.reduce(0, +))
+                        HStack {
+                            StatBox(label: "Total", value: "\(total)")
+                            StatBox(label: "Daily Avg", value: String(format: "%.1f", dailyValues.reduce(0, +) / Double(dailyValues.count)))
+                            StatBox(label: "Best Day", value: "\(Int(dailyValues.max()!))")
+                            StatBox(label: "Days", value: "\(aggs.count)")
+                        }
+                    }
+                }
+            }
+
+            if tracker.type == .scale {
                 Section("Stats") {
                     let values = filteredEntries.map(\.value)
                     if !values.isEmpty {
@@ -159,14 +185,14 @@ struct TrackerDetailView: View {
                             StatBox(label: "Avg", value: String(format: "%.1f", values.reduce(0, +) / Double(values.count)))
                             StatBox(label: "Min", value: "\(Int(values.min()!))")
                             StatBox(label: "Max", value: "\(Int(values.max()!))")
-                            StatBox(label: "Count", value: "\(values.count)")
+                            StatBox(label: "Entries", value: "\(values.count)")
                         }
                     }
                 }
             }
 
             Section("History") {
-                ForEach(tracker.sortedEntries.prefix(50)) { entry in
+                ForEach(trackerEntries.prefix(50)) { entry in
                     Button {
                         selectedEntry = entry
                     } label: {
@@ -176,6 +202,7 @@ struct TrackerDetailView: View {
                     .swipeActions(edge: .trailing) {
                         Button(role: .destructive) {
                             modelContext.delete(entry)
+                            WidgetCenter.shared.reloadAllTimelines()
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
@@ -185,7 +212,6 @@ struct TrackerDetailView: View {
         }
         .navigationTitle(tracker.name)
         .navigationBarTitleDisplayMode(.large)
-        .id(refreshID)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Menu {
@@ -218,20 +244,12 @@ struct TrackerDetailView: View {
         }
         .sheet(isPresented: $showingLogEntry) {
             LogEntryView(tracker: tracker)
-                .onDisappear { refreshID = UUID() }
         }
         .sheet(isPresented: $showingEditTracker) {
             EditTrackerView(tracker: tracker)
-                .onDisappear { refreshID = UUID() }
         }
         .sheet(item: $selectedEntry) { entry in
             EditEntryView(entry: entry, tracker: tracker)
-                .onDisappear { refreshID = UUID() }
-        }
-        .onChange(of: scenePhase) { _, newPhase in
-            if newPhase == .active {
-                refreshID = UUID()
-            }
         }
     }
 
