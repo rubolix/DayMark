@@ -12,8 +12,8 @@ struct DayMarkApp: App {
         .modelContainer(SharedModelContainer.container)
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .active {
-                // Pick up any changes made by the widget extension
-                SharedModelContainer.container.mainContext.autosaveEnabled = true
+                // Reset the main context to pick up changes written by the widget extension
+                SharedModelContainer.container.mainContext.rollback()
             }
         }
     }
