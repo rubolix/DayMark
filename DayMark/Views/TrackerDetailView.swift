@@ -204,7 +204,7 @@ struct TrackerDetailView: View {
                     .swipeActions(edge: .trailing) {
                         Button(role: .destructive) {
                             modelContext.delete(entry)
-                            WidgetCenter.shared.reloadAllTimelines()
+                            SharedModelContainer.saveAndReloadWidgets(modelContext)
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
@@ -263,7 +263,7 @@ struct TrackerDetailView: View {
             Button("Delete", role: .destructive) {
                 NotificationManager.removeReminders(for: tracker)
                 modelContext.delete(tracker)
-                WidgetCenter.shared.reloadAllTimelines()
+                SharedModelContainer.saveAndReloadWidgets(modelContext)
                 dismiss()
             }
             Button("Cancel", role: .cancel) {}

@@ -87,6 +87,7 @@ struct ProfileDetailView: View {
         .alert("Delete \(profile.name)?", isPresented: $showingDeleteAlert) {
             Button("Delete", role: .destructive) {
                 modelContext.delete(profile)
+                SharedModelContainer.saveAndReloadWidgets(modelContext)
                 dismiss()
             }
             Button("Cancel", role: .cancel) { }

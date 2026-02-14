@@ -150,7 +150,7 @@ struct LogEntryView: View {
         let entry = Entry(date: date, value: value, note: composedNote)
         entry.tracker = tracker
         modelContext.insert(entry)
-        WidgetCenter.shared.reloadAllTimelines()
+        SharedModelContainer.saveAndReloadWidgets(modelContext)
         dismiss()
     }
 }

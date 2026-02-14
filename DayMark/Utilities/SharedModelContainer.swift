@@ -1,6 +1,7 @@
 import SwiftData
 import Foundation
 import Combine
+import WidgetKit
 
 struct SharedModelContainer {
     static let appGroupIdentifier = "group.com.rubolix.DayMark"
@@ -27,6 +28,19 @@ struct SharedModelContainer {
     static func notifyStoreChanged() {
         let center = CFNotificationCenterGetDarwinNotifyCenter()
         CFNotificationCenterPostNotification(center, CFNotificationName(darwinNotificationName as CFString), nil, nil, true)
+    }
+
+    /// Save the context, reload widget timelines, and schedule a follow-up reload.
+    @MainActor
+    static func saveAndReloadWidgets(_ context: ModelContext) {
+        try? context.save()
+        WidgetCenter.shared.reloadAllTimelines()
+        // Schedule follow-up reloads to catch WidgetKit timing delays
+        for delay in [1.0, 3.0] {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                WidgetCenter.shared.reloadAllTimelines()
+            }
+        }
     }
 }
 
