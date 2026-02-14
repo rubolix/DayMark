@@ -1,0 +1,338 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8F976D11F3AC489588F74CEC /* DayMarkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DC0A89C18C47198CC8B26E /* DayMarkApp.swift */; };
+		200BBDC78C9B4ACCBB92DE69 /* Subject.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF418F58556344AE823249A6 /* Subject.swift */; };
+		614EB94AF7364579AFA0A14F /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30412414FDBD406A8D64E3E6 /* Tracker.swift */; };
+		08767490E3D34F1E8DCCACC9 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADDD45626DF4DE9B2F02A9A /* Entry.swift */; };
+		5DE9E61D6BC14878986CB76C /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06431277E7C84EDB9AD34D47 /* ColorExtensions.swift */; };
+		CDE825178A8E461197AD7EDB /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5002FCD93DB14216AE0307C1 /* DataManager.swift */; };
+		61FB89A59E834DA8BC3DFB64 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9AFF22F94949B090BCA448 /* DashboardView.swift */; };
+		97AAED2B0B0245708DEEA198 /* SubjectDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04699A086EC04B20B509D8EC /* SubjectDetailView.swift */; };
+		163E0F5C99884B8CBF027BBE /* TrackerDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F55B01A882649EEA6CF9054 /* TrackerDetailView.swift */; };
+		6E47B0434A6F48F8B60774D3 /* AddSubjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A36173A2A74B6CA8666DAF /* AddSubjectView.swift */; };
+		F920BF94ED1A4EE1923EE3FD /* EditSubjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150FC6DDDABD4169A69B8797 /* EditSubjectView.swift */; };
+		F8B6907361604A0C9283B5F4 /* AddTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230D65AABB274CA38D587A01 /* AddTrackerView.swift */; };
+		CA025C2AD2654A0BA38A3553 /* EditTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE90CC8DF7934E56BF910460 /* EditTrackerView.swift */; };
+		3A4A5CF920DF4335B20C93BC /* LogEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFF57A630D547A290F91F4E /* LogEntryView.swift */; };
+		08F96D8F331F4B89BE27D13C /* EditEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC98DC0EE374787AEDF8D35 /* EditEntryView.swift */; };
+		2DDD669649A547B387AC8281 /* DataSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76FA9BDEC564E71824E166C /* DataSettingsView.swift */; };
+		C0A2CDAACC374682AE0AECAE /* SubjectCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30D1AC8DA9B449D98F00C4A /* SubjectCard.swift */; };
+		2A1C7D9FA1DA46E0AADAEACD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76C70FC1299345B5ADDD5004 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		D5D5F9421E8942329AA1A4C8 /* DayMark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DayMark.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		74DC0A89C18C47198CC8B26E /* DayMarkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayMarkApp.swift; sourceTree = "<group>"; };
+		EF418F58556344AE823249A6 /* Subject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
+		30412414FDBD406A8D64E3E6 /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
+		0ADDD45626DF4DE9B2F02A9A /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
+		06431277E7C84EDB9AD34D47 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
+		5002FCD93DB14216AE0307C1 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		2C9AFF22F94949B090BCA448 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		04699A086EC04B20B509D8EC /* SubjectDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectDetailView.swift; sourceTree = "<group>"; };
+		4F55B01A882649EEA6CF9054 /* TrackerDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerDetailView.swift; sourceTree = "<group>"; };
+		A3A36173A2A74B6CA8666DAF /* AddSubjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSubjectView.swift; sourceTree = "<group>"; };
+		150FC6DDDABD4169A69B8797 /* EditSubjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSubjectView.swift; sourceTree = "<group>"; };
+		230D65AABB274CA38D587A01 /* AddTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTrackerView.swift; sourceTree = "<group>"; };
+		FE90CC8DF7934E56BF910460 /* EditTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrackerView.swift; sourceTree = "<group>"; };
+		5AFF57A630D547A290F91F4E /* LogEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogEntryView.swift; sourceTree = "<group>"; };
+		0BC98DC0EE374787AEDF8D35 /* EditEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEntryView.swift; sourceTree = "<group>"; };
+		B76FA9BDEC564E71824E166C /* DataSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSettingsView.swift; sourceTree = "<group>"; };
+		D30D1AC8DA9B449D98F00C4A /* SubjectCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectCard.swift; sourceTree = "<group>"; };
+		76C70FC1299345B5ADDD5004 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7DAE9C248DE047B68C0A71C6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DEECDC156DB44B36BF13A412 = {
+			isa = PBXGroup;
+			children = (
+				07D8A7EB5CA548249F8A0FB7 /* DayMark */,
+				634345B05B2546B48F1534DE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		634345B05B2546B48F1534DE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D5D5F9421E8942329AA1A4C8 /* DayMark.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		07D8A7EB5CA548249F8A0FB7 /* DayMark */ = {
+			isa = PBXGroup;
+			children = (
+				74DC0A89C18C47198CC8B26E /* DayMarkApp.swift */,
+				76C70FC1299345B5ADDD5004 /* Assets.xcassets */,
+				B570FB69D2BD409486406214 /* Models */,
+				01EB48F516F541839AD0E24C /* Utilities */,
+				9799C4E955B4429BBA86E324 /* Views */,
+			);
+			path = DayMark;
+			sourceTree = "<group>";
+		};
+		B570FB69D2BD409486406214 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				EF418F58556344AE823249A6 /* Subject.swift */,
+				30412414FDBD406A8D64E3E6 /* Tracker.swift */,
+				0ADDD45626DF4DE9B2F02A9A /* Entry.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		01EB48F516F541839AD0E24C /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				06431277E7C84EDB9AD34D47 /* ColorExtensions.swift */,
+				5002FCD93DB14216AE0307C1 /* DataManager.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		9799C4E955B4429BBA86E324 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2C9AFF22F94949B090BCA448 /* DashboardView.swift */,
+				04699A086EC04B20B509D8EC /* SubjectDetailView.swift */,
+				4F55B01A882649EEA6CF9054 /* TrackerDetailView.swift */,
+				A3A36173A2A74B6CA8666DAF /* AddSubjectView.swift */,
+				150FC6DDDABD4169A69B8797 /* EditSubjectView.swift */,
+				230D65AABB274CA38D587A01 /* AddTrackerView.swift */,
+				FE90CC8DF7934E56BF910460 /* EditTrackerView.swift */,
+				5AFF57A630D547A290F91F4E /* LogEntryView.swift */,
+				0BC98DC0EE374787AEDF8D35 /* EditEntryView.swift */,
+				B76FA9BDEC564E71824E166C /* DataSettingsView.swift */,
+				3CFEF71CBD364F5EB4AF28A5 /* Components */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3CFEF71CBD364F5EB4AF28A5 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				D30D1AC8DA9B449D98F00C4A /* SubjectCard.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		63BA27FA1A1447C69FF44819 /* DayMark */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7CA67F2AABF941689282CFA3 /* Build configuration list for PBXNativeTarget "DayMark" */;
+			buildPhases = (
+				7C341C93EEC74F56AF932C25 /* Sources */,
+				7DAE9C248DE047B68C0A71C6 /* Frameworks */,
+				D44A323C3A5140568E9D57B3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DayMark;
+			productName = DayMark;
+			productReference = D5D5F9421E8942329AA1A4C8 /* DayMark.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EDA8A9780F4841F69CE5CF3A /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 074AB66F932441E8BF4853DE /* Build configuration list for PBXProject "DayMark" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DEECDC156DB44B36BF13A412;
+			productRefGroup = 634345B05B2546B48F1534DE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				63BA27FA1A1447C69FF44819 /* DayMark */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D44A323C3A5140568E9D57B3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A1C7D9FA1DA46E0AADAEACD /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7C341C93EEC74F56AF932C25 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8F976D11F3AC489588F74CEC /* DayMarkApp.swift in Sources */,
+				200BBDC78C9B4ACCBB92DE69 /* Subject.swift in Sources */,
+				614EB94AF7364579AFA0A14F /* Tracker.swift in Sources */,
+				08767490E3D34F1E8DCCACC9 /* Entry.swift in Sources */,
+				5DE9E61D6BC14878986CB76C /* ColorExtensions.swift in Sources */,
+				CDE825178A8E461197AD7EDB /* DataManager.swift in Sources */,
+				61FB89A59E834DA8BC3DFB64 /* DashboardView.swift in Sources */,
+				97AAED2B0B0245708DEEA198 /* SubjectDetailView.swift in Sources */,
+				163E0F5C99884B8CBF027BBE /* TrackerDetailView.swift in Sources */,
+				6E47B0434A6F48F8B60774D3 /* AddSubjectView.swift in Sources */,
+				F920BF94ED1A4EE1923EE3FD /* EditSubjectView.swift in Sources */,
+				F8B6907361604A0C9283B5F4 /* AddTrackerView.swift in Sources */,
+				CA025C2AD2654A0BA38A3553 /* EditTrackerView.swift in Sources */,
+				3A4A5CF920DF4335B20C93BC /* LogEntryView.swift in Sources */,
+				08F96D8F331F4B89BE27D13C /* EditEntryView.swift in Sources */,
+				2DDD669649A547B387AC8281 /* DataSettingsView.swift in Sources */,
+				C0A2CDAACC374682AE0AECAE /* SubjectCard.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		DB243B75019148E08558F477 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		9475D24C9E884E529E37825C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3616ECEC12754F9582DC0055 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6NP9249SPC;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DayMark/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rubolix.DayMark;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A84663658BE34A0EA00D957B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6NP9249SPC;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DayMark/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rubolix.DayMark;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		074AB66F932441E8BF4853DE /* Build configuration list for PBXProject "DayMark" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DB243B75019148E08558F477 /* Debug */,
+				9475D24C9E884E529E37825C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7CA67F2AABF941689282CFA3 /* Build configuration list for PBXNativeTarget "DayMark" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3616ECEC12754F9582DC0055 /* Debug */,
+				A84663658BE34A0EA00D957B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EDA8A9780F4841F69CE5CF3A /* Project object */;
+}
