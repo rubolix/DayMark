@@ -54,6 +54,9 @@ struct TrackerDetailView: View {
                         Spacer()
                         Button("Unarchive") {
                             tracker.isArchived = false
+                            if tracker.reminderCadence != .none {
+                                NotificationManager.scheduleReminders(for: tracker)
+                            }
                         }
                         .buttonStyle(.bordered)
                         .tint(.orange)
@@ -181,6 +184,11 @@ struct TrackerDetailView: View {
                     }
                     Button {
                         tracker.isArchived.toggle()
+                        if tracker.isArchived {
+                            NotificationManager.removeReminders(for: tracker)
+                        } else if tracker.reminderCadence != .none {
+                            NotificationManager.scheduleReminders(for: tracker)
+                        }
                     } label: {
                         Label(tracker.isArchived ? "Unarchive" : "Archive", systemImage: tracker.isArchived ? "play.circle" : "pause.circle")
                     }

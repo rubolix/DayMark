@@ -1,23 +1,23 @@
 import SwiftUI
 
-struct SubjectCard: View {
-    let subject: Subject
+struct ProfileCard: View {
+    let profile: Profile
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text(subject.emoji)
+                Text(profile.emoji)
                     .font(.title2)
-                Text(subject.name)
+                Text(profile.name)
                     .font(.headline)
                 Spacer()
-                let active = subject.trackers.filter { !$0.isArchived }
+                let active = profile.trackers.filter { !$0.isArchived }
                 Text("\(active.count) tracker\(active.count == 1 ? "" : "s")")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
 
-            let activeTrackers = subject.trackers.filter { !$0.isArchived }
+            let activeTrackers = profile.trackers.filter { !$0.isArchived }
             if activeTrackers.isEmpty {
                 Text("No active trackers")
                     .font(.subheadline)
@@ -38,7 +38,7 @@ struct SubjectCard: View {
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(hex: subject.colorHex).opacity(0.4), lineWidth: 1.5)
+                .stroke(Color(hex: profile.colorHex).opacity(0.4), lineWidth: 1.5)
         )
     }
 }

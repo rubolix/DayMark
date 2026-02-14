@@ -21,10 +21,10 @@ Sometimes you need to track things over time but don't want to use a spreadsheet
 - **Yes / No** — Binary events (e.g., did the dog poop inside? did I exercise?)
 - **Count** — Log a number with optional units (e.g., 8 glasses, 45 minutes)
 
-### 👥 Multiple Subjects
+### 👥 Multiple Profiles
 - Track different things for different people or pets
-- Each subject gets their own emoji icon and color
-- Dashboard shows all subjects with latest tracker values at a glance
+- Each profile gets their own emoji icon and color
+- Dashboard shows all profiles with latest tracker values at a glance
 
 ### 📈 Charts & Stats
 - Visualize data over **daily**, **weekly**, **monthly**, or **custom date ranges**
@@ -45,7 +45,7 @@ Sometimes you need to track things over time but don't want to use a spreadsheet
 - Unarchive at any time to resume
 
 ### ✏️ Fully Editable
-- Add, edit, and delete subjects, trackers, and individual entries
+- Add, edit, and delete profiles, trackers, and individual entries
 - Tap any entry to edit its value, date, or note
 - Swipe-to-delete on entry history
 
@@ -122,25 +122,25 @@ All 75 tests should pass.
 DayMark/
 ├── DayMarkApp.swift               # App entry point with SwiftData container
 ├── Models/
-│   ├── Subject.swift              # Person/pet model
+│   ├── Profile.swift              # Person/pet model
 │   ├── Tracker.swift              # Tracker model (scale, yes/no, count)
 │   └── Entry.swift                # Individual data entry
 ├── Utilities/
 │   ├── DataManager.swift          # JSON/HTML export, JSON import
 │   └── ColorExtensions.swift      # Color helpers + jewel tone palette
 ├── Views/
-│   ├── DashboardView.swift        # Main dashboard with subject cards
-│   ├── SubjectDetailView.swift    # Subject detail with tracker list
+│   ├── DashboardView.swift        # Main dashboard with profile cards
+│   ├── ProfileDetailView.swift    # Profile detail with tracker list
 │   ├── TrackerDetailView.swift    # Charts, stats, and entry history
-│   ├── AddSubjectView.swift       # Add a person or pet
-│   ├── EditSubjectView.swift      # Edit subject details
+│   ├── AddProfileView.swift       # Add a person or pet
+│   ├── EditProfileView.swift      # Edit profile details
 │   ├── AddTrackerView.swift       # Create a new tracker
 │   ├── EditTrackerView.swift      # Edit tracker settings
 │   ├── LogEntryView.swift         # Log a new data point
 │   ├── EditEntryView.swift        # Edit an existing entry
 │   ├── DataSettingsView.swift     # Export/import settings
 │   └── Components/
-│       └── SubjectCard.swift      # Dashboard card component
+│       └── ProfileCard.swift      # Dashboard card component
 └── Assets.xcassets/               # App icon and colors
 ```
 

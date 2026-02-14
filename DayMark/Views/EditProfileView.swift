@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct EditSubjectView: View {
-    let subject: Subject
+struct EditProfileView: View {
+    let profile: Profile
     @Environment(\.dismiss) private var dismiss
 
     @State private var name: String
@@ -10,11 +10,11 @@ struct EditSubjectView: View {
 
     private let emojiOptions = ["👤", "👩", "👨", "👧", "👦", "🐕", "🐈", "🐾", "👶", "🧑‍🦳", "🏠", "⭐️"]
 
-    init(subject: Subject) {
-        self.subject = subject
-        _name = State(initialValue: subject.name)
-        _emoji = State(initialValue: subject.emoji)
-        _selectedColor = State(initialValue: subject.colorHex)
+    init(profile: Profile) {
+        self.profile = profile
+        _name = State(initialValue: profile.name)
+        _emoji = State(initialValue: profile.emoji)
+        _selectedColor = State(initialValue: profile.colorHex)
     }
 
     var body: some View {
@@ -60,7 +60,7 @@ struct EditSubjectView: View {
                     .padding(.vertical, 4)
                 }
             }
-            .navigationTitle("Edit Subject")
+            .navigationTitle("Edit Profile")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -75,9 +75,9 @@ struct EditSubjectView: View {
     }
 
     private func save() {
-        subject.name = name.trimmingCharacters(in: .whitespaces)
-        subject.emoji = emoji
-        subject.colorHex = selectedColor
+        profile.name = name.trimmingCharacters(in: .whitespaces)
+        profile.emoji = emoji
+        profile.colorHex = selectedColor
         dismiss()
     }
 }

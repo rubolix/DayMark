@@ -9,6 +9,12 @@ struct EditTrackerView: View {
     @State private var scaleMax: Int
     @State private var unit: String
     @State private var selectedColor: String
+    @State private var presetNotes: [String]
+    @State private var newPresetNote = ""
+    @State private var reminderCadence: ReminderCadence
+    @State private var reminderTime: Date
+    @State private var reminderWeekday: Int
+    @State private var reminderCustomDays: [Int]
 
     init(tracker: Tracker) {
         self.tracker = tracker
@@ -17,6 +23,11 @@ struct EditTrackerView: View {
         _scaleMax = State(initialValue: tracker.scaleMax)
         _unit = State(initialValue: tracker.unit)
         _selectedColor = State(initialValue: tracker.colorHex)
+        _presetNotes = State(initialValue: tracker.presetNotes)
+        _reminderCadence = State(initialValue: tracker.reminderCadence)
+        _reminderTime = State(initialValue: tracker.reminderTime)
+        _reminderWeekday = State(initialValue: tracker.reminderWeekday)
+        _reminderCustomDays = State(initialValue: tracker.reminderCustomDays)
     }
 
     var body: some View {
@@ -38,6 +49,48 @@ struct EditTrackerView: View {
                         TextField("e.g., glasses, minutes", text: $unit)
                     }
                 }
+
+                Section {
+                    ForEach(presetNotes, id: \.self) { preset in
+                        HStack {
+                            Text(preset)
+                            Spacer()
+                            Button {
+                                presetNotes.removeAll { $0 == preset }
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundStyle(.secondary)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    HStack {
+                        TextField("Add a quick note", text: $newPresetNote)
+                        Button {
+                            let trimmed = newPresetNote.trimmingCharacters(in: .whitespaces)
+                            if !trimmed.isEmpty && !presetNotes.contains(trimmed) {
+                                presetNotes.append(trimmed)
+                                newPresetNote = ""
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundStyle(Color(hex: selectedColor))
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(newPresetNote.trimmingCharacters(in: .whitespaces).isEmpty)
+                    }
+                } header: {
+                    Text("Quick Notes")
+                } footer: {
+                    Text("Preset notes you can tap to quickly add when logging an entry.")
+                }
+
+                ReminderSection(
+                    cadence: $reminderCadence,
+                    reminderTime: $reminderTime,
+                    weekday: $reminderWeekday,
+                    customDays: $reminderCustomDays
+                )
 
                 Section("Color") {
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 6), spacing: 12) {
@@ -75,6 +128,25 @@ struct EditTrackerView: View {
         tracker.scaleMax = scaleMax
         tracker.unit = unit.trimmingCharacters(in: .whitespaces)
         tracker.colorHex = selectedColor
+        tracker.presetNotes = presetNotes
+        tracker.reminderCadence = reminderCadence
+        let comps = Calendar.current.dateComponents([.hour, .minute], from: reminderTime)
+        tracker.reminderHour = comps.hour ?? 20
+        tracker.reminderMinute = comps.minute ?? 0
+        tracker.reminderWeekday = reminderWeekday
+        tracker.reminderCustomDays = reminderCustomDays
+
+        if reminderCadence != .none {
+            Task {
+                let granted = await NotificationManager.requestPermission()
+                if granted {
+                    NotificationManager.scheduleReminders(for: tracker)
+                }
+            }
+        } else {
+            NotificationManager.removeReminders(for: tracker)
+        }
+
         dismiss()
     }
 }

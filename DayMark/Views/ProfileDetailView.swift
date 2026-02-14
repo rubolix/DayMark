@@ -1,19 +1,19 @@
 import SwiftUI
 
-struct SubjectDetailView: View {
-    let subject: Subject
+struct ProfileDetailView: View {
+    let profile: Profile
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @State private var showingAddTracker = false
-    @State private var showingEditSubject = false
+    @State private var showingEditProfile = false
     @State private var showingDeleteAlert = false
 
     var activeTrackers: [Tracker] {
-        subject.trackers.filter { !$0.isArchived }.sorted { $0.name < $1.name }
+        profile.trackers.filter { !$0.isArchived }.sorted { $0.name < $1.name }
     }
 
     var archivedTrackers: [Tracker] {
-        subject.trackers.filter { $0.isArchived }.sorted { $0.name < $1.name }
+        profile.trackers.filter { $0.isArchived }.sorted { $0.name < $1.name }
     }
 
     var body: some View {
@@ -46,7 +46,7 @@ struct SubjectDetailView: View {
                 }
             }
         }
-        .navigationTitle("\(subject.emoji) \(subject.name)")
+        .navigationTitle("\(profile.emoji) \(profile.name)")
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -57,15 +57,15 @@ struct SubjectDetailView: View {
                         Label("Add Tracker", systemImage: "plus")
                     }
                     Button {
-                        showingEditSubject = true
+                        showingEditProfile = true
                     } label: {
-                        Label("Edit Subject", systemImage: "pencil")
+                        Label("Edit Profile", systemImage: "pencil")
                     }
                     Divider()
                     Button(role: .destructive) {
                         showingDeleteAlert = true
                     } label: {
-                        Label("Delete Subject", systemImage: "trash")
+                        Label("Delete Profile", systemImage: "trash")
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
@@ -73,19 +73,19 @@ struct SubjectDetailView: View {
             }
         }
         .sheet(isPresented: $showingAddTracker) {
-            AddTrackerView(subject: subject)
+            AddTrackerView(profile: profile)
         }
-        .sheet(isPresented: $showingEditSubject) {
-            EditSubjectView(subject: subject)
+        .sheet(isPresented: $showingEditProfile) {
+            EditProfileView(profile: profile)
         }
-        .alert("Delete \(subject.name)?", isPresented: $showingDeleteAlert) {
+        .alert("Delete \(profile.name)?", isPresented: $showingDeleteAlert) {
             Button("Delete", role: .destructive) {
-                modelContext.delete(subject)
+                modelContext.delete(profile)
                 dismiss()
             }
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("This will delete all trackers and entries for \(subject.name). This cannot be undone.")
+            Text("This will delete all trackers and entries for \(profile.name). This cannot be undone.")
         }
     }
 }

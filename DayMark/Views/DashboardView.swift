@@ -3,19 +3,19 @@ import SwiftData
 
 struct DashboardView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query(sort: \Subject.name) private var subjects: [Subject]
-    @State private var showingAddSubject = false
+    @Query(sort: \Profile.name) private var profiles: [Profile]
+    @State private var showingAddProfile = false
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                if subjects.isEmpty {
+                if profiles.isEmpty {
                     emptyState
                 } else {
                     LazyVStack(spacing: 16) {
-                        ForEach(subjects) { subject in
-                            NavigationLink(destination: SubjectDetailView(subject: subject)) {
-                                SubjectCard(subject: subject)
+                        ForEach(profiles) { profile in
+                            NavigationLink(destination: ProfileDetailView(profile: profile)) {
+                                ProfileCard(profile: profile)
                             }
                             .buttonStyle(.plain)
                         }
@@ -33,14 +33,14 @@ struct DashboardView: View {
                 }
                 ToolbarItem(placement: .primaryAction) {
                     Button {
-                        showingAddSubject = true
+                        showingAddProfile = true
                     } label: {
                         Image(systemName: "plus.circle")
                     }
                 }
             }
-            .sheet(isPresented: $showingAddSubject) {
-                AddSubjectView()
+            .sheet(isPresented: $showingAddProfile) {
+                AddProfileView()
             }
         }
     }
@@ -58,8 +58,8 @@ struct DashboardView: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
-            Button("Add Subject") {
-                showingAddSubject = true
+            Button("Add Profile") {
+                showingAddProfile = true
             }
             .buttonStyle(.borderedProminent)
             .tint(Color(hex: "#6A4C93"))

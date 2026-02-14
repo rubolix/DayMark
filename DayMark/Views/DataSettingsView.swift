@@ -67,7 +67,7 @@ struct DataSettingsView: View {
             Button("Import", role: .destructive) { performImport() }
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("This will add all subjects, trackers, and entries from the backup file. Existing data will not be removed.")
+            Text("This will add all profiles, trackers, and entries from the backup file. Existing data will not be removed.")
         }
         .alert(resultIsError ? "Error" : "Success", isPresented: $showingResult) {
             Button("OK") { }
@@ -133,7 +133,7 @@ struct DataSettingsView: View {
 
             let data = try Data(contentsOf: url)
             let result = try DataManager.importJSON(from: data, into: modelContext)
-            resultMessage = "Imported \(result.subjects) subjects, \(result.trackers) trackers, and \(result.entries) entries."
+            resultMessage = "Imported \(result.profiles) profiles, \(result.trackers) trackers, and \(result.entries) entries."
             resultIsError = false
             showingResult = true
         } catch {

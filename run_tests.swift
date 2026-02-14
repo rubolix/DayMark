@@ -138,10 +138,10 @@ print(String(repeating: "=", count: 50))
 struct TestBackup: Codable {
     let version: Int
     let exportDate: Date
-    let subjects: [TestSubject]
+    let profiles: [TestProfile]
 }
 
-struct TestSubject: Codable {
+struct TestProfile: Codable {
     let name: String
     let emoji: String
     let colorHex: String
@@ -154,6 +154,12 @@ struct TestTracker: Codable {
     let scaleMin: Int
     let scaleMax: Int
     let unit: String
+    let presetNotes: [String]
+    let reminderCadence: String?
+    let reminderHour: Int?
+    let reminderMinute: Int?
+    let reminderWeekday: Int?
+    let reminderCustomDays: [Int]?
     let entries: [TestEntry]
 }
 
@@ -168,8 +174,8 @@ let testDate = cal.date(from: DateComponents(year: 2026, month: 1, day: 15, hour
 let backup = TestBackup(
     version: 1,
     exportDate: now,
-    subjects: [
-        TestSubject(
+    profiles: [
+        TestProfile(
             name: "Steph",
             emoji: "👩",
             colorHex: "#6A4C93",
@@ -180,6 +186,12 @@ let backup = TestBackup(
                     scaleMin: 1,
                     scaleMax: 5,
                     unit: "",
+                    presetNotes: ["After coffee", "Stressful day", "Well rested"],
+                    reminderCadence: "Daily",
+                    reminderHour: 20,
+                    reminderMinute: 0,
+                    reminderWeekday: nil,
+                    reminderCustomDays: nil,
                     entries: [
                         TestEntry(date: testDate, value: 3.0, note: "Normal day")
                     ]
@@ -190,13 +202,19 @@ let backup = TestBackup(
                     scaleMin: 1,
                     scaleMax: 5,
                     unit: "glasses",
+                    presetNotes: [],
+                    reminderCadence: "Weekdays",
+                    reminderHour: 17,
+                    reminderMinute: 30,
+                    reminderWeekday: nil,
+                    reminderCustomDays: nil,
                     entries: [
                         TestEntry(date: testDate, value: 8.0, note: "")
                     ]
                 )
             ]
         ),
-        TestSubject(
+        TestProfile(
             name: "Buddy",
             emoji: "🐕",
             colorHex: "#2A9D5C",
@@ -207,6 +225,12 @@ let backup = TestBackup(
                     scaleMin: 1,
                     scaleMax: 5,
                     unit: "",
+                    presetNotes: ["Morning", "While away"],
+                    reminderCadence: "Custom",
+                    reminderHour: 21,
+                    reminderMinute: 0,
+                    reminderWeekday: nil,
+                    reminderCustomDays: [2, 4, 6],
                     entries: [
                         TestEntry(date: testDate, value: 0.0, note: "Good boy")
                     ]
@@ -225,7 +249,7 @@ do {
     assert(data.count > 0, "JSON encode: produces data")
 
     let jsonString = String(data: data, encoding: .utf8)!
-    assert(jsonString.contains("Steph"), "JSON encode: contains subject name")
+    assert(jsonString.contains("Steph"), "JSON encode: contains profile name")
     assert(jsonString.contains("Irritability"), "JSON encode: contains tracker name")
     assert(jsonString.contains("Indoor Accident"), "JSON encode: contains yes/no tracker")
     assert(jsonString.contains("glasses"), "JSON encode: contains unit")
@@ -237,11 +261,11 @@ do {
     let decoded = try decoder.decode(TestBackup.self, from: data)
 
     assert(decoded.version == 1, "JSON decode: version = 1")
-    assert(decoded.subjects.count == 2, "JSON decode: 2 subjects")
-    assert(decoded.subjects[0].name == "Buddy" || decoded.subjects[1].name == "Buddy", "JSON decode: has Buddy")
-    assert(decoded.subjects[0].trackers.count + decoded.subjects[1].trackers.count == 3, "JSON decode: 3 total trackers")
+    assert(decoded.profiles.count == 2, "JSON decode: 2 profiles")
+    assert(decoded.profiles[0].name == "Buddy" || decoded.profiles[1].name == "Buddy", "JSON decode: has Buddy")
+    assert(decoded.profiles[0].trackers.count + decoded.profiles[1].trackers.count == 3, "JSON decode: 3 total trackers")
 
-    let steph = decoded.subjects.first { $0.name == "Steph" }!
+    let steph = decoded.profiles.first { $0.name == "Steph" }!
     assert(steph.emoji == "👩", "JSON decode: emoji preserved")
     assert(steph.colorHex == "#6A4C93", "JSON decode: color preserved")
 
@@ -253,10 +277,29 @@ do {
     assert(irritability.entries[0].value == 3.0, "JSON decode: entry value preserved")
     assert(irritability.entries[0].note == "Normal day", "JSON decode: note preserved")
 
-    let buddy = decoded.subjects.first { $0.name == "Buddy" }!
+    // Preset notes tests
+    assert(irritability.presetNotes.count == 3, "JSON decode: 3 preset notes for Irritability")
+    assert(irritability.presetNotes.contains("After coffee"), "JSON decode: preset note 'After coffee' preserved")
+    assert(irritability.presetNotes.contains("Stressful day"), "JSON decode: preset note 'Stressful day' preserved")
+
+    // Reminder tests
+    assert(irritability.reminderCadence == "Daily", "JSON decode: reminder cadence 'Daily' preserved")
+    assert(irritability.reminderHour == 20, "JSON decode: reminder hour 20 preserved")
+    assert(irritability.reminderMinute == 0, "JSON decode: reminder minute 0 preserved")
+
+    let waterIntake = steph.trackers.first { $0.name == "Water Intake" }!
+    assert(waterIntake.reminderCadence == "Weekdays", "JSON decode: 'Weekdays' cadence preserved")
+    assert(waterIntake.reminderHour == 17, "JSON decode: reminder hour 17 preserved")
+    assert(waterIntake.reminderMinute == 30, "JSON decode: reminder minute 30 preserved")
+    assert(waterIntake.presetNotes.isEmpty, "JSON decode: empty preset notes preserved")
+
+    let buddy = decoded.profiles.first { $0.name == "Buddy" }!
     let accident = buddy.trackers[0]
     assert(accident.type == "Yes / No", "JSON decode: YesNo type preserved")
     assert(accident.entries[0].value == 0.0, "JSON decode: No value = 0.0")
+    assert(accident.presetNotes.count == 2, "JSON decode: 2 preset notes for accident")
+    assert(accident.reminderCadence == "Custom", "JSON decode: 'Custom' cadence preserved")
+    assert(accident.reminderCustomDays == [2, 4, 6], "JSON decode: custom days [2,4,6] preserved")
 } catch {
     failed += 1
     print("  ❌ JSON encoding/decoding failed: \(error)")
@@ -358,6 +401,47 @@ let twoWeeksEntries: [(Date, Double)] = (0..<14).map { i in
 }
 let weekCount = groupByWeek(twoWeeksEntries)
 assert(weekCount >= 2 && weekCount <= 3, "Week grouping: 14 days spans 2-3 weeks (got \(weekCount))")
+
+// ============================================================
+print("\n🔔 REMINDER TESTS")
+print(String(repeating: "=", count: 50))
+
+// Cadence to weekdays mapping
+func weekdaysForCadence(_ cadence: String, weekday: Int = 2, customDays: [Int] = []) -> [Int] {
+    switch cadence {
+    case "Daily": return [1, 2, 3, 4, 5, 6, 7]
+    case "Weekdays": return [2, 3, 4, 5, 6]
+    case "Weekends": return [1, 7]
+    case "Weekly": return [weekday]
+    case "Custom": return customDays
+    default: return []
+    }
+}
+
+assert(weekdaysForCadence("Daily").count == 7, "Daily: 7 notifications")
+assert(weekdaysForCadence("Weekdays").count == 5, "Weekdays: 5 notifications")
+assert(weekdaysForCadence("Weekdays") == [2, 3, 4, 5, 6], "Weekdays: Mon-Fri")
+assert(weekdaysForCadence("Weekends").count == 2, "Weekends: 2 notifications")
+assert(weekdaysForCadence("Weekends") == [1, 7], "Weekends: Sun, Sat")
+assert(weekdaysForCadence("Weekly", weekday: 4) == [4], "Weekly Wed: 1 notification on day 4")
+assert(weekdaysForCadence("Weekly", weekday: 1) == [1], "Weekly Sun: 1 notification on day 1")
+assert(weekdaysForCadence("Custom", customDays: [2, 4, 6]) == [2, 4, 6], "Custom MWF: days 2,4,6")
+assert(weekdaysForCadence("Custom", customDays: []) == [], "Custom empty: 0 notifications")
+assert(weekdaysForCadence("None").count == 0, "None: 0 notifications")
+
+// Preset notes tests
+let presets = ["After coffee", "Stressful day", "Well rested"]
+assert(presets.contains("After coffee"), "Preset notes: contains expected value")
+assert(!presets.contains("Not a preset"), "Preset notes: doesn't contain unknown value")
+assert(presets.count == 3, "Preset notes: correct count")
+
+// Preset note selection (toggle behavior)
+var selectedNote = ""
+let tapPreset = "After coffee"
+selectedNote = (selectedNote == tapPreset) ? "" : tapPreset
+assert(selectedNote == "After coffee", "Preset tap: selects note")
+selectedNote = (selectedNote == tapPreset) ? "" : tapPreset
+assert(selectedNote == "", "Preset tap again: deselects note")
 
 // ============================================================
 print("\n" + String(repeating: "=", count: 50))

@@ -4,9 +4,9 @@ import SwiftData
 struct DayMarkBackup: Codable {
     let version: Int
     let exportDate: Date
-    let subjects: [SubjectData]
+    let profiles: [ProfileData]
 
-    struct SubjectData: Codable {
+    struct ProfileData: Codable {
         let name: String
         let emoji: String
         let colorHex: String
@@ -21,6 +21,12 @@ struct DayMarkBackup: Codable {
         let unit: String
         let colorHex: String
         let isArchived: Bool
+        let presetNotes: [String]
+        let reminderCadence: String?
+        let reminderHour: Int?
+        let reminderMinute: Int?
+        let reminderWeekday: Int?
+        let reminderCustomDays: [Int]?
         let entries: [EntryData]
     }
 
@@ -34,18 +40,18 @@ struct DayMarkBackup: Codable {
 struct DataManager {
 
     static func exportJSON(from context: ModelContext) throws -> Data {
-        let descriptor = FetchDescriptor<Subject>(sortBy: [SortDescriptor(\.name)])
-        let subjects = try context.fetch(descriptor)
+        let descriptor = FetchDescriptor<Profile>(sortBy: [SortDescriptor(\.name)])
+        let profiles = try context.fetch(descriptor)
 
         let backup = DayMarkBackup(
             version: 1,
             exportDate: Date(),
-            subjects: subjects.map { subject in
-                DayMarkBackup.SubjectData(
-                    name: subject.name,
-                    emoji: subject.emoji,
-                    colorHex: subject.colorHex,
-                    trackers: subject.trackers.map { tracker in
+            profiles: profiles.map { profile in
+                DayMarkBackup.ProfileData(
+                    name: profile.name,
+                    emoji: profile.emoji,
+                    colorHex: profile.colorHex,
+                    trackers: profile.trackers.map { tracker in
                         DayMarkBackup.TrackerData(
                             name: tracker.name,
                             type: tracker.type.rawValue,
@@ -54,6 +60,12 @@ struct DataManager {
                             unit: tracker.unit,
                             colorHex: tracker.colorHex,
                             isArchived: tracker.isArchived,
+                            presetNotes: tracker.presetNotes,
+                            reminderCadence: tracker.reminderCadence.rawValue,
+                            reminderHour: tracker.reminderHour,
+                            reminderMinute: tracker.reminderMinute,
+                            reminderWeekday: tracker.reminderWeekday,
+                            reminderCustomDays: tracker.reminderCustomDays,
                             entries: tracker.sortedEntries.map { entry in
                                 DayMarkBackup.EntryData(date: entry.date, value: entry.value, note: entry.note)
                             }
@@ -70,8 +82,8 @@ struct DataManager {
     }
 
     static func exportHTML(from context: ModelContext) throws -> Data {
-        let descriptor = FetchDescriptor<Subject>(sortBy: [SortDescriptor(\.name)])
-        let subjects = try context.fetch(descriptor)
+        let descriptor = FetchDescriptor<Profile>(sortBy: [SortDescriptor(\.name)])
+        let profiles = try context.fetch(descriptor)
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
@@ -97,13 +109,13 @@ struct DataManager {
         <p class="meta">Exported \(dateFormatter.string(from: Date()))</p>
         """
 
-        for subject in subjects {
+        for profile in profiles {
             html += """
             <div class="subject">
-            <h2>\(subject.emoji) \(escapeHTML(subject.name))</h2>
+            <h2>\(profile.emoji) \(escapeHTML(profile.name))</h2>
             """
 
-            for tracker in subject.trackers {
+            for tracker in profile.trackers {
                 let typeLabel: String
                 switch tracker.type {
                 case .scale: typeLabel = "Scale (\(tracker.scaleMin)–\(tracker.scaleMax))"
@@ -146,16 +158,16 @@ struct DataManager {
         decoder.dateDecodingStrategy = .iso8601
         let backup = try decoder.decode(DayMarkBackup.self, from: data)
 
-        var subjectCount = 0
+        var profileCount = 0
         var trackerCount = 0
         var entryCount = 0
 
-        for subjectData in backup.subjects {
-            let subject = Subject(name: subjectData.name, emoji: subjectData.emoji, colorHex: subjectData.colorHex)
-            context.insert(subject)
-            subjectCount += 1
+        for profileData in backup.profiles {
+            let profile = Profile(name: profileData.name, emoji: profileData.emoji, colorHex: profileData.colorHex)
+            context.insert(profile)
+            profileCount += 1
 
-            for trackerData in subjectData.trackers {
+            for trackerData in profileData.trackers {
                 let type = TrackerType(rawValue: trackerData.type) ?? .count
                 let tracker = Tracker(
                     name: trackerData.name,
@@ -163,10 +175,18 @@ struct DataManager {
                     scaleMin: trackerData.scaleMin,
                     scaleMax: trackerData.scaleMax,
                     unit: trackerData.unit,
-                    colorHex: trackerData.colorHex
+                    colorHex: trackerData.colorHex,
+                    presetNotes: trackerData.presetNotes
                 )
                 tracker.isArchived = trackerData.isArchived
-                tracker.subject = subject
+                if let cadence = trackerData.reminderCadence {
+                    tracker.reminderCadence = ReminderCadence(rawValue: cadence) ?? .none
+                }
+                tracker.reminderHour = trackerData.reminderHour ?? 20
+                tracker.reminderMinute = trackerData.reminderMinute ?? 0
+                tracker.reminderWeekday = trackerData.reminderWeekday ?? 2
+                tracker.reminderCustomDays = trackerData.reminderCustomDays ?? []
+                tracker.profile = profile
                 context.insert(tracker)
                 trackerCount += 1
 
@@ -179,7 +199,7 @@ struct DataManager {
             }
         }
 
-        return ImportResult(subjects: subjectCount, trackers: trackerCount, entries: entryCount)
+        return ImportResult(profiles: profileCount, trackers: trackerCount, entries: entryCount)
     }
 
     private static func escapeHTML(_ string: String) -> String {
@@ -191,7 +211,7 @@ struct DataManager {
     }
 
     struct ImportResult {
-        let subjects: Int
+        let profiles: Int
         let trackers: Int
         let entries: Int
     }

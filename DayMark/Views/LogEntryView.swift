@@ -89,6 +89,31 @@ struct LogEntryView: View {
                 }
 
                 Section("Note (optional)") {
+                    if !tracker.presetNotes.isEmpty {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(tracker.presetNotes, id: \.self) { preset in
+                                    Button {
+                                        if note == preset {
+                                            note = ""
+                                        } else {
+                                            note = preset
+                                        }
+                                    } label: {
+                                        Text(preset)
+                                            .font(.subheadline)
+                                            .padding(.horizontal, 12)
+                                            .padding(.vertical, 6)
+                                            .background(note == preset ? Color(hex: tracker.colorHex) : Color(hex: tracker.colorHex).opacity(0.15))
+                                            .foregroundStyle(note == preset ? .white : Color(hex: tracker.colorHex))
+                                            .clipShape(Capsule())
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                            .padding(.vertical, 4)
+                        }
+                    }
                     TextField("Any additional context", text: $note)
                 }
             }

@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct AddSubjectView: View {
+struct AddProfileView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
@@ -53,7 +53,7 @@ struct AddSubjectView: View {
                     .padding(.vertical, 4)
                 }
             }
-            .navigationTitle("Add Subject")
+            .navigationTitle("Add Profile")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -68,8 +68,8 @@ struct AddSubjectView: View {
     }
 
     private func save() {
-        let subject = Subject(name: name.trimmingCharacters(in: .whitespaces), emoji: emoji, colorHex: selectedColor)
-        modelContext.insert(subject)
+        let profile = Profile(name: name.trimmingCharacters(in: .whitespaces), emoji: emoji, colorHex: selectedColor)
+        modelContext.insert(profile)
         dismiss()
     }
 }
