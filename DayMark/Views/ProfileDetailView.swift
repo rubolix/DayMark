@@ -24,6 +24,21 @@ struct ProfileDetailView: View {
 
     var body: some View {
         List {
+            Section {
+                HStack(spacing: 12) {
+                    ProfileIcon(emoji: profile.emoji, photoData: profile.photoData, colorHex: profile.colorHex, size: 56)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(profile.name)
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        Text("\(activeTrackers.count) active · \(archivedTrackers.count) archived")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .padding(.vertical, 4)
+            }
+
             if activeTrackers.isEmpty && archivedTrackers.isEmpty {
                 Section {
                     Text("No trackers yet. Tap ⋯ to add one.")
@@ -52,8 +67,8 @@ struct ProfileDetailView: View {
                 }
             }
         }
-        .navigationTitle("\(profile.emoji) \(profile.name)")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationTitle(profile.name)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Menu {
