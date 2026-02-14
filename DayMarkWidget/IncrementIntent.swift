@@ -35,6 +35,7 @@ struct IncrementTrackerIntent: AppIntent {
         context.insert(entry)
         try? context.save()
 
+        SharedModelContainer.notifyStoreChanged()
         WidgetCenter.shared.reloadAllTimelines()
 
         return .result(value: true)

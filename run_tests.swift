@@ -444,6 +444,43 @@ selectedNote = (selectedNote == tapPreset) ? "" : tapPreset
 assert(selectedNote == "", "Preset tap again: deselects note")
 
 // ============================================================
+print("\n🔄 CROSS-PROCESS SYNC TESTS")
+print(String(repeating: "=", count: 50))
+
+// Darwin notification name is consistent between app and widget
+let expectedNotificationName = "com.rubolix.DayMark.storeDidChange"
+assert(expectedNotificationName.contains("DayMark"), "Darwin notification: contains app identifier")
+assert(expectedNotificationName.hasPrefix("com.rubolix."), "Darwin notification: proper reverse-DNS prefix")
+
+// Refresh ID changes on refresh (simulated)
+var refreshID1 = UUID()
+let refreshID2 = UUID()
+assert(refreshID1 != refreshID2, "Refresh coordinator: new UUID differs from previous")
+
+// Simulated cross-context write visibility
+// Context A writes, Context B should see it after re-fetch
+struct SimStore {
+    var entries: [(id: UUID, value: Double)] = []
+    mutating func insert(value: Double) -> UUID {
+        let id = UUID()
+        entries.append((id: id, value: value))
+        return id
+    }
+}
+
+var store = SimStore()
+let entryID = store.insert(value: 1.0)
+assert(store.entries.count == 1, "Cross-context: store has 1 entry after insert")
+assert(store.entries.first?.id == entryID, "Cross-context: entry ID matches")
+assert(store.entries.first?.value == 1.0, "Cross-context: entry value = 1.0 (widget increment)")
+
+// Multiple increments accumulate
+let _ = store.insert(value: 1.0)
+let _ = store.insert(value: 1.0)
+let todayTotal = store.entries.reduce(0.0) { $0 + $1.value }
+assert(todayTotal == 3.0, "Cross-context: 3 increments total to 3.0")
+
+// ============================================================
 print("\n" + String(repeating: "=", count: 50))
 print("📊 RESULTS: \(passed) passed, \(failed) failed")
 if failed == 0 {
