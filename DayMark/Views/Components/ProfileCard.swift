@@ -5,8 +5,7 @@ struct ProfileCard: View {
 
     var body: some View {
         HStack {
-            Text(profile.emoji)
-                .font(.title2)
+            ProfileIcon(emoji: profile.emoji, photoData: profile.photoData, colorHex: profile.colorHex, size: 40)
             Text(profile.name)
                 .font(.headline)
             Spacer()

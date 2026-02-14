@@ -7,6 +7,7 @@ final class Profile {
     var emoji: String
     var colorHex: String
     var createdAt: Date
+    @Attribute(.externalStorage) var photoData: Data?
 
     @Relationship(deleteRule: .cascade, inverse: \Tracker.profile)
     var trackers: [Tracker] = []
@@ -16,5 +17,6 @@ final class Profile {
         self.emoji = emoji
         self.colorHex = colorHex
         self.createdAt = Date()
+        self.photoData = nil
     }
 }
