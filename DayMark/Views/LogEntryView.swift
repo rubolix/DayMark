@@ -9,11 +9,19 @@ struct LogEntryView: View {
     @State private var scaleValue: Int
     @State private var yesNoValue = true
     @State private var countValue = 1
-    @State private var note = ""
+    @State private var selectedPresets: Set<String> = []
+    @State private var customNote = ""
 
     init(tracker: Tracker) {
         self.tracker = tracker
         _scaleValue = State(initialValue: (tracker.scaleMin + tracker.scaleMax) / 2)
+    }
+
+    private var composedNote: String {
+        var parts: [String] = tracker.presetNotes.filter { selectedPresets.contains($0) }
+        let trimmed = customNote.trimmingCharacters(in: .whitespaces)
+        if !trimmed.isEmpty { parts.append(trimmed) }
+        return parts.joined(separator: " · ")
     }
 
     var body: some View {
@@ -94,18 +102,18 @@ struct LogEntryView: View {
                             HStack(spacing: 8) {
                                 ForEach(tracker.presetNotes, id: \.self) { preset in
                                     Button {
-                                        if note == preset {
-                                            note = ""
+                                        if selectedPresets.contains(preset) {
+                                            selectedPresets.remove(preset)
                                         } else {
-                                            note = preset
+                                            selectedPresets.insert(preset)
                                         }
                                     } label: {
                                         Text(preset)
                                             .font(.subheadline)
                                             .padding(.horizontal, 12)
                                             .padding(.vertical, 6)
-                                            .background(note == preset ? Color(hex: tracker.colorHex) : Color(hex: tracker.colorHex).opacity(0.15))
-                                            .foregroundStyle(note == preset ? .white : Color(hex: tracker.colorHex))
+                                            .background(selectedPresets.contains(preset) ? Color(hex: tracker.colorHex) : Color(hex: tracker.colorHex).opacity(0.15))
+                                            .foregroundStyle(selectedPresets.contains(preset) ? .white : Color(hex: tracker.colorHex))
                                             .clipShape(Capsule())
                                     }
                                     .buttonStyle(.plain)
@@ -114,7 +122,7 @@ struct LogEntryView: View {
                             .padding(.vertical, 4)
                         }
                     }
-                    TextField("Any additional context", text: $note)
+                    TextField("Any additional context", text: $customNote)
                 }
             }
             .navigationTitle("Log Entry")
@@ -138,7 +146,7 @@ struct LogEntryView: View {
         case .count: value = Double(countValue)
         }
 
-        let entry = Entry(date: date, value: value, note: note.trimmingCharacters(in: .whitespaces))
+        let entry = Entry(date: date, value: value, note: composedNote)
         entry.tracker = tracker
         modelContext.insert(entry)
         dismiss()

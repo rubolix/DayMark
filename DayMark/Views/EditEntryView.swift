@@ -9,7 +9,8 @@ struct EditEntryView: View {
     @State private var scaleValue: Int
     @State private var yesNoValue: Bool
     @State private var countValue: Int
-    @State private var note: String
+    @State private var selectedPresets: Set<String>
+    @State private var customNote: String
 
     init(entry: Entry, tracker: Tracker) {
         self.entry = entry
@@ -18,7 +19,20 @@ struct EditEntryView: View {
         _scaleValue = State(initialValue: Int(entry.value))
         _yesNoValue = State(initialValue: entry.value >= 1)
         _countValue = State(initialValue: Int(entry.value))
-        _note = State(initialValue: entry.note)
+
+        // Parse existing note back into presets and custom text
+        let parts = entry.note.components(separatedBy: " · ")
+        let presets = Set(parts.filter { tracker.presetNotes.contains($0) })
+        let custom = parts.filter { !tracker.presetNotes.contains($0) }.joined(separator: " · ")
+        _selectedPresets = State(initialValue: presets)
+        _customNote = State(initialValue: custom)
+    }
+
+    private var composedNote: String {
+        var parts: [String] = tracker.presetNotes.filter { selectedPresets.contains($0) }
+        let trimmed = customNote.trimmingCharacters(in: .whitespaces)
+        if !trimmed.isEmpty { parts.append(trimmed) }
+        return parts.joined(separator: " · ")
     }
 
     var body: some View {
@@ -93,18 +107,18 @@ struct EditEntryView: View {
                             HStack(spacing: 8) {
                                 ForEach(tracker.presetNotes, id: \.self) { preset in
                                     Button {
-                                        if note == preset {
-                                            note = ""
+                                        if selectedPresets.contains(preset) {
+                                            selectedPresets.remove(preset)
                                         } else {
-                                            note = preset
+                                            selectedPresets.insert(preset)
                                         }
                                     } label: {
                                         Text(preset)
                                             .font(.subheadline)
                                             .padding(.horizontal, 12)
                                             .padding(.vertical, 6)
-                                            .background(note == preset ? Color(hex: tracker.colorHex) : Color(hex: tracker.colorHex).opacity(0.15))
-                                            .foregroundStyle(note == preset ? .white : Color(hex: tracker.colorHex))
+                                            .background(selectedPresets.contains(preset) ? Color(hex: tracker.colorHex) : Color(hex: tracker.colorHex).opacity(0.15))
+                                            .foregroundStyle(selectedPresets.contains(preset) ? .white : Color(hex: tracker.colorHex))
                                             .clipShape(Capsule())
                                     }
                                     .buttonStyle(.plain)
@@ -113,7 +127,7 @@ struct EditEntryView: View {
                             .padding(.vertical, 4)
                         }
                     }
-                    TextField("Any additional context", text: $note)
+                    TextField("Any additional context", text: $customNote)
                 }
             }
             .navigationTitle("Edit Entry")
@@ -131,7 +145,7 @@ struct EditEntryView: View {
 
     private func save() {
         entry.date = date
-        entry.note = note.trimmingCharacters(in: .whitespaces)
+        entry.note = composedNote
         switch tracker.type {
         case .scale: entry.value = Double(scaleValue)
         case .yesNo: entry.value = yesNoValue ? 1.0 : 0.0
