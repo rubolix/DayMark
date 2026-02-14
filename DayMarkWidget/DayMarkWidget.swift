@@ -36,7 +36,7 @@ struct CountTrackerProvider: AppIntentTimelineProvider {
 
     func timeline(for configuration: SelectTrackerIntent, in context: Context) async -> Timeline<CountTrackerEntry> {
         let entry = await loadEntry(for: configuration)
-        return Timeline(entries: [entry], policy: .atEnd)
+        return Timeline(entries: [entry], policy: .never)
     }
 
     @MainActor

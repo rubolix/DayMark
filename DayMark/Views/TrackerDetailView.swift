@@ -20,9 +20,11 @@ struct TrackerDetailView: View {
     @Bindable var tracker: Tracker
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dismiss) private var dismiss
     @Query private var allEntries: [Entry]
     @State private var showingLogEntry = false
     @State private var showingEditTracker = false
+    @State private var showingDeleteConfirmation = false
     @State private var selectedEntry: Entry?
     @State private var chartPeriod: ChartPeriod = .week
     @State private var customStart = Calendar.current.date(byAdding: .month, value: -1, to: Date())!
@@ -237,6 +239,12 @@ struct TrackerDetailView: View {
                     } label: {
                         Label(tracker.isArchived ? "Unarchive" : "Archive", systemImage: tracker.isArchived ? "play.circle" : "pause.circle")
                     }
+                    Divider()
+                    Button(role: .destructive) {
+                        showingDeleteConfirmation = true
+                    } label: {
+                        Label("Delete Tracker", systemImage: "trash")
+                    }
                 } label: {
                     Image(systemName: "ellipsis.circle")
                 }
@@ -250,6 +258,17 @@ struct TrackerDetailView: View {
         }
         .sheet(item: $selectedEntry) { entry in
             EditEntryView(entry: entry, tracker: tracker)
+        }
+        .alert("Delete Tracker", isPresented: $showingDeleteConfirmation) {
+            Button("Delete", role: .destructive) {
+                NotificationManager.removeReminders(for: tracker)
+                modelContext.delete(tracker)
+                WidgetCenter.shared.reloadAllTimelines()
+                dismiss()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Are you sure you want to delete \"\(tracker.name)\"? All \(tracker.entries.count) entries will be permanently deleted.")
         }
     }
 

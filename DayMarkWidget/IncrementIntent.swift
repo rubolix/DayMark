@@ -33,10 +33,14 @@ struct IncrementTrackerIntent: AppIntent {
         let entry = Entry(date: .now, value: 1)
         entry.tracker = tracker
         context.insert(entry)
-        try? context.save()
+        do {
+            try context.save()
+        } catch {
+            return .result(value: false)
+        }
 
-        SharedModelContainer.notifyStoreChanged()
         WidgetCenter.shared.reloadAllTimelines()
+        SharedModelContainer.notifyStoreChanged()
 
         return .result(value: true)
     }
