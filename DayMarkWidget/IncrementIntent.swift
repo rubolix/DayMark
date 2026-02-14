@@ -22,7 +22,7 @@ struct IncrementTrackerIntent: AppIntent {
         let trackers = (try? context.fetch(descriptor)) ?? []
 
         guard let tracker = trackers.first(where: {
-            $0.persistentModelID.hashValue.description == trackerID
+            $0.id.uuidString == trackerID
         }) else {
             return .result(value: false)
         }

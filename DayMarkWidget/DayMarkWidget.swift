@@ -59,7 +59,7 @@ struct CountTrackerProvider: AppIntentTimelineProvider {
         let trackers = (try? context.fetch(descriptor)) ?? []
 
         guard let tracker = trackers.first(where: {
-            $0.persistentModelID.hashValue.description == selectedTracker.id
+            $0.id.uuidString == selectedTracker.id
         }) else {
             return CountTrackerEntry(
                 date: .now,

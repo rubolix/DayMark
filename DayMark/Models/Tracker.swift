@@ -18,6 +18,7 @@ enum ReminderCadence: String, Codable, CaseIterable {
 
 @Model
 final class Tracker {
+    @Attribute(.unique) var id: UUID
     var name: String
     var type: TrackerType
     var scaleMin: Int
@@ -38,6 +39,7 @@ final class Tracker {
     var entries: [Entry] = []
 
     init(name: String, type: TrackerType, scaleMin: Int = 1, scaleMax: Int = 5, unit: String = "", colorHex: String = "#1982C4", presetNotes: [String] = []) {
+        self.id = UUID()
         self.name = name
         self.type = type
         self.scaleMin = scaleMin

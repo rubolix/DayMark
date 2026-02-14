@@ -22,10 +22,10 @@ struct TrackerEntityQuery: EntityQuery {
         let descriptor = FetchDescriptor<Tracker>()
         let trackers = (try? context.fetch(descriptor)) ?? []
         return trackers
-            .filter { identifiers.contains($0.persistentModelID.hashValue.description) }
+            .filter { identifiers.contains($0.id.uuidString) }
             .map { tracker in
                 TrackerEntity(
-                    id: tracker.persistentModelID.hashValue.description,
+                    id: tracker.id.uuidString,
                     name: tracker.name,
                     profileName: tracker.profile?.name ?? "Unknown"
                 )
@@ -40,7 +40,7 @@ struct TrackerEntityQuery: EntityQuery {
             .filter { !$0.isArchived && $0.type == .count }
             .map { tracker in
                 TrackerEntity(
-                    id: tracker.persistentModelID.hashValue.description,
+                    id: tracker.id.uuidString,
                     name: tracker.name,
                     profileName: tracker.profile?.name ?? "Unknown"
                 )
