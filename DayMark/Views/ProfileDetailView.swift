@@ -1,19 +1,25 @@
 import SwiftUI
+import SwiftData
 
 struct ProfileDetailView: View {
     let profile: Profile
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Query private var allTrackers: [Tracker]
     @State private var showingAddTracker = false
     @State private var showingEditProfile = false
     @State private var showingDeleteAlert = false
 
+    private var profileTrackers: [Tracker] {
+        allTrackers.filter { $0.profile?.persistentModelID == profile.persistentModelID }
+    }
+
     var activeTrackers: [Tracker] {
-        profile.trackers.filter { !$0.isArchived }.sorted { $0.name < $1.name }
+        profileTrackers.filter { !$0.isArchived }.sorted { $0.name < $1.name }
     }
 
     var archivedTrackers: [Tracker] {
-        profile.trackers.filter { $0.isArchived }.sorted { $0.name < $1.name }
+        profileTrackers.filter { $0.isArchived }.sorted { $0.name < $1.name }
     }
 
     var body: some View {
@@ -92,11 +98,21 @@ struct ProfileDetailView: View {
 
 struct TrackerListRow: View {
     let tracker: Tracker
+    @Query private var allEntries: [Entry]
+
+    init(tracker: Tracker) {
+        self.tracker = tracker
+        self._allEntries = Query(sort: \Entry.date, order: .reverse)
+    }
+
+    private var trackerEntries: [Entry] {
+        allEntries.filter { $0.tracker?.id == tracker.id }
+    }
 
     private var todayTotal: String {
         let cal = Calendar.current
         let today = cal.startOfDay(for: Date())
-        let todayEntries = tracker.entries.filter { cal.isDate($0.date, inSameDayAs: today) }
+        let todayEntries = trackerEntries.filter { cal.isDate($0.date, inSameDayAs: today) }
         let sum = Int(todayEntries.reduce(0) { $0 + $1.value })
         if tracker.unit.isEmpty {
             return "\(sum) today"
@@ -131,7 +147,7 @@ struct TrackerListRow: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             } else {
-                Text("\(tracker.entries.count) entries")
+                Text("\(trackerEntries.count) entries")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }

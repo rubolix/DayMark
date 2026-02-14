@@ -12,8 +12,8 @@ struct DayMarkApp: App {
         .modelContainer(SharedModelContainer.container)
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .active {
-                // Re-fetch data that may have been changed by the widget
-                try? SharedModelContainer.container.mainContext.save()
+                // Pick up any changes made by the widget extension
+                SharedModelContainer.container.mainContext.autosaveEnabled = true
             }
         }
     }

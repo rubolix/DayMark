@@ -1,7 +1,13 @@
 import SwiftUI
+import SwiftData
 
 struct ProfileCard: View {
     let profile: Profile
+    @Query private var allTrackers: [Tracker]
+
+    private var activeCount: Int {
+        allTrackers.filter { $0.profile?.persistentModelID == profile.persistentModelID && !$0.isArchived }.count
+    }
 
     var body: some View {
         HStack {
@@ -9,8 +15,7 @@ struct ProfileCard: View {
             Text(profile.name)
                 .font(.headline)
             Spacer()
-            let active = profile.trackers.filter { !$0.isArchived }
-            Text("\(active.count) tracker\(active.count == 1 ? "" : "s")")
+            Text("\(activeCount) tracker\(activeCount == 1 ? "" : "s")")
                 .font(.caption)
                 .foregroundStyle(.secondary)
             Image(systemName: "chevron.right")
