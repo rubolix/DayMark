@@ -6,14 +6,18 @@ struct DashboardView: View {
     @Query(sort: \Profile.name) private var profiles: [Profile]
     @State private var showingAddProfile = false
 
+    private var activeProfiles: [Profile] {
+        profiles.filter { !$0.isArchived }
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
-                if profiles.isEmpty {
+                if activeProfiles.isEmpty {
                     emptyState
                 } else {
                     LazyVStack(spacing: 16) {
-                        ForEach(profiles) { profile in
+                        ForEach(activeProfiles) { profile in
                             NavigationLink(destination: ProfileDetailView(profile: profile)) {
                                 ProfileCard(profile: profile)
                             }

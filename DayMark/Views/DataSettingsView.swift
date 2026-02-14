@@ -3,6 +3,7 @@ import SwiftData
 
 struct DataSettingsView: View {
     @Environment(\.modelContext) private var modelContext
+    @Query(sort: \Profile.name) private var allProfiles: [Profile]
     @State private var showingExportShare = false
     @State private var showingHTMLShare = false
     @State private var showingImportPicker = false
@@ -13,8 +14,36 @@ struct DataSettingsView: View {
     @State private var exportFileURL: URL?
     @State private var pendingImportURL: URL?
 
+    private var archivedProfiles: [Profile] {
+        allProfiles.filter { $0.isArchived }
+    }
+
     var body: some View {
         List {
+            if !archivedProfiles.isEmpty {
+                Section("Archived Profiles") {
+                    ForEach(archivedProfiles) { profile in
+                        HStack(spacing: 12) {
+                            ProfileIcon(emoji: profile.emoji, photoData: profile.photoData, colorHex: profile.colorHex, size: 36)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(profile.name)
+                                    .font(.body)
+                                Text("\(profile.trackers.count) tracker\(profile.trackers.count == 1 ? "" : "s")")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Button("Reactivate") {
+                                profile.isArchived = false
+                            }
+                            .buttonStyle(.bordered)
+                            .tint(.blue)
+                            .controlSize(.small)
+                        }
+                    }
+                }
+            }
+
             Section {
                 Button {
                     exportJSON()
@@ -44,7 +73,7 @@ struct DataSettingsView: View {
                 Text("Import adds data from a previously exported JSON file. Existing data is not removed.")
             }
         }
-        .navigationTitle("Data")
+        .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingExportShare) {
             if let url = exportFileURL {

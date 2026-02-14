@@ -230,14 +230,19 @@ struct TrackerDetailView: View {
                         Label("Edit Tracker", systemImage: "pencil")
                     }
                     Button {
-                        tracker.isArchived.toggle()
                         if tracker.isArchived {
+                            tracker.isArchived = false
+                            if tracker.reminderCadence != .none {
+                                NotificationManager.scheduleReminders(for: tracker)
+                            }
+                        } else {
+                            tracker.isArchived = true
                             NotificationManager.removeReminders(for: tracker)
-                        } else if tracker.reminderCadence != .none {
-                            NotificationManager.scheduleReminders(for: tracker)
+                            SharedModelContainer.saveAndReloadWidgets(modelContext)
+                            dismiss()
                         }
                     } label: {
-                        Label(tracker.isArchived ? "Unarchive" : "Archive", systemImage: tracker.isArchived ? "play.circle" : "pause.circle")
+                        Label(tracker.isArchived ? "Unarchive" : "Archive", systemImage: tracker.isArchived ? "play.circle" : "archivebox")
                     }
                     Divider()
                     Button(role: .destructive) {

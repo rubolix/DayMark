@@ -9,6 +9,7 @@ struct ProfileDetailView: View {
     @State private var showingAddTracker = false
     @State private var showingEditProfile = false
     @State private var showingDeleteAlert = false
+    @State private var showingArchivedTrackers = false
 
     private var profileTrackers: [Tracker] {
         allTrackers.filter { $0.profile?.persistentModelID == profile.persistentModelID }
@@ -31,7 +32,7 @@ struct ProfileDetailView: View {
                         Text(profile.name)
                             .font(.title2)
                             .fontWeight(.bold)
-                        Text("\(activeTrackers.count) active · \(archivedTrackers.count) archived")
+                        Text("\(activeTrackers.count) active tracker\(activeTrackers.count == 1 ? "" : "s")")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
@@ -39,9 +40,9 @@ struct ProfileDetailView: View {
                 .padding(.vertical, 4)
             }
 
-            if activeTrackers.isEmpty && archivedTrackers.isEmpty {
+            if activeTrackers.isEmpty {
                 Section {
-                    Text("No trackers yet. Tap ⋯ to add one.")
+                    Text("No active trackers. Tap ⋯ to add one.")
                         .foregroundStyle(.secondary)
                 }
             }
@@ -51,17 +52,6 @@ struct ProfileDetailView: View {
                     ForEach(activeTrackers) { tracker in
                         NavigationLink(destination: TrackerDetailView(tracker: tracker)) {
                             TrackerListRow(tracker: tracker)
-                        }
-                    }
-                }
-            }
-
-            if !archivedTrackers.isEmpty {
-                Section("Archived") {
-                    ForEach(archivedTrackers) { tracker in
-                        NavigationLink(destination: TrackerDetailView(tracker: tracker)) {
-                            TrackerListRow(tracker: tracker)
-                                .opacity(0.6)
                         }
                     }
                 }
@@ -82,7 +72,24 @@ struct ProfileDetailView: View {
                     } label: {
                         Label("Edit Profile", systemImage: "pencil")
                     }
+                    if !archivedTrackers.isEmpty {
+                        Button {
+                            showingArchivedTrackers = true
+                        } label: {
+                            Label("Archived Trackers (\(archivedTrackers.count))", systemImage: "archivebox")
+                        }
+                    }
                     Divider()
+                    Button {
+                        profile.isArchived = true
+                        for tracker in profileTrackers {
+                            NotificationManager.removeReminders(for: tracker)
+                        }
+                        SharedModelContainer.saveAndReloadWidgets(modelContext)
+                        dismiss()
+                    } label: {
+                        Label("Archive Profile", systemImage: "archivebox")
+                    }
                     Button(role: .destructive) {
                         showingDeleteAlert = true
                     } label: {
@@ -98,6 +105,9 @@ struct ProfileDetailView: View {
         }
         .sheet(isPresented: $showingEditProfile) {
             EditProfileView(profile: profile)
+        }
+        .sheet(isPresented: $showingArchivedTrackers) {
+            ArchivedTrackersSheet(trackers: archivedTrackers)
         }
         .alert("Delete \(profile.name)?", isPresented: $showingDeleteAlert) {
             Button("Delete", role: .destructive) {
@@ -166,6 +176,54 @@ struct TrackerListRow: View {
                 Text("\(trackerEntries.count) entries")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
+            }
+        }
+    }
+}
+
+struct ArchivedTrackersSheet: View {
+    let trackers: [Tracker]
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            List {
+                if trackers.isEmpty {
+                    Text("No archived trackers.")
+                        .foregroundStyle(.secondary)
+                } else {
+                    ForEach(trackers) { tracker in
+                        HStack {
+                            Circle()
+                                .fill(Color(hex: tracker.colorHex))
+                                .frame(width: 12, height: 12)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(tracker.name)
+                                    .font(.body)
+                                Text("\(tracker.entries.count) entries · \(tracker.type.rawValue)")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Button("Unarchive") {
+                                tracker.isArchived = false
+                                if tracker.reminderCadence != .none {
+                                    NotificationManager.scheduleReminders(for: tracker)
+                                }
+                            }
+                            .buttonStyle(.bordered)
+                            .tint(.blue)
+                            .controlSize(.small)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Archived Trackers")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { dismiss() }
+                }
             }
         }
     }
