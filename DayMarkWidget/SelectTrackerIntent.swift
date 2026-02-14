@@ -17,8 +17,10 @@ struct TrackerEntity: AppEntity {
 }
 
 struct TrackerEntityQuery: EntityQuery {
+    @MainActor
     func entities(for identifiers: [String]) async throws -> [TrackerEntity] {
-        let context = SharedModelContainer.newContext()
+        let container = SharedModelContainer.container
+        let context = ModelContext(container)
         let descriptor = FetchDescriptor<Tracker>()
         let trackers = (try? context.fetch(descriptor)) ?? []
         return trackers
@@ -32,8 +34,10 @@ struct TrackerEntityQuery: EntityQuery {
             }
     }
 
+    @MainActor
     func suggestedEntities() async throws -> [TrackerEntity] {
-        let context = SharedModelContainer.newContext()
+        let container = SharedModelContainer.container
+        let context = ModelContext(container)
         let descriptor = FetchDescriptor<Tracker>()
         let trackers = (try? context.fetch(descriptor)) ?? []
         return trackers

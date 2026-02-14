@@ -6,6 +6,7 @@ import Foundation
 struct IncrementTrackerIntent: AppIntent {
     static var title: LocalizedStringResource = "Increment Tracker"
     static var description: IntentDescription = "Add one to a count tracker."
+    static var openAppWhenRun: Bool = false
 
     @Parameter(title: "Tracker ID")
     var trackerID: String
@@ -16,8 +17,10 @@ struct IncrementTrackerIntent: AppIntent {
         self.trackerID = trackerID
     }
 
+    @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<Bool> {
-        let context = SharedModelContainer.newContext()
+        let container = SharedModelContainer.container
+        let context = ModelContext(container)
         let descriptor = FetchDescriptor<Tracker>()
         let trackers = (try? context.fetch(descriptor)) ?? []
 

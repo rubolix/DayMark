@@ -31,14 +31,15 @@ struct CountTrackerProvider: AppIntentTimelineProvider {
     }
 
     func snapshot(for configuration: SelectTrackerIntent, in context: Context) async -> CountTrackerEntry {
-        loadEntry(for: configuration)
+        await loadEntry(for: configuration)
     }
 
     func timeline(for configuration: SelectTrackerIntent, in context: Context) async -> Timeline<CountTrackerEntry> {
-        let entry = loadEntry(for: configuration)
+        let entry = await loadEntry(for: configuration)
         return Timeline(entries: [entry], policy: .atEnd)
     }
 
+    @MainActor
     private func loadEntry(for configuration: SelectTrackerIntent) -> CountTrackerEntry {
         guard let selectedTracker = configuration.tracker else {
             return CountTrackerEntry(
@@ -54,7 +55,8 @@ struct CountTrackerProvider: AppIntentTimelineProvider {
             )
         }
 
-        let context = SharedModelContainer.newContext()
+        let container = SharedModelContainer.container
+        let context = ModelContext(container)
         let descriptor = FetchDescriptor<Tracker>()
         let trackers = (try? context.fetch(descriptor)) ?? []
 

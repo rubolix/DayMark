@@ -1,5 +1,7 @@
 import SwiftUI
+import SwiftData
 import Charts
+import WidgetKit
 
 enum ChartPeriod: String, CaseIterable {
     case week = "Week"
@@ -8,9 +10,16 @@ enum ChartPeriod: String, CaseIterable {
     case custom = "Custom"
 }
 
+struct DailyAggregate: Identifiable {
+    let id = UUID()
+    let date: Date
+    let value: Double
+}
+
 struct TrackerDetailView: View {
     @Bindable var tracker: Tracker
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
     @State private var showingLogEntry = false
     @State private var showingEditTracker = false
     @State private var selectedEntry: Entry?
@@ -19,28 +28,36 @@ struct TrackerDetailView: View {
     @State private var customEnd = Date()
     @State private var refreshID = UUID()
 
-    var filteredEntries: [Entry] {
+    private var dateRange: (start: Date, end: Date) {
         let cal = Calendar.current
         let now = Date()
-        let start: Date
-        let end: Date
-
         switch chartPeriod {
         case .week:
-            start = cal.date(byAdding: .day, value: -7, to: now)!
-            end = now
+            return (cal.date(byAdding: .day, value: -7, to: now)!, now)
         case .month:
-            start = cal.date(byAdding: .month, value: -1, to: now)!
-            end = now
+            return (cal.date(byAdding: .month, value: -1, to: now)!, now)
         case .threeMonths:
-            start = cal.date(byAdding: .month, value: -3, to: now)!
-            end = now
+            return (cal.date(byAdding: .month, value: -3, to: now)!, now)
         case .custom:
-            start = customStart
-            end = cal.date(byAdding: .day, value: 1, to: customEnd)!
+            return (customStart, cal.date(byAdding: .day, value: 1, to: customEnd)!)
         }
+    }
 
-        return tracker.sortedEntries.filter { $0.date >= start && $0.date <= end }
+    var filteredEntries: [Entry] {
+        let range = dateRange
+        return tracker.sortedEntries.filter { $0.date >= range.start && $0.date <= range.end }
+    }
+
+    /// Aggregate entries by day, summing values for count trackers
+    var dailyAggregates: [DailyAggregate] {
+        let cal = Calendar.current
+        var grouped: [Date: Double] = [:]
+        for entry in filteredEntries {
+            let day = cal.startOfDay(for: entry.date)
+            grouped[day, default: 0] += entry.value
+        }
+        return grouped.map { DailyAggregate(date: $0.key, value: $0.value) }
+            .sorted { $0.date < $1.date }
     }
 
     var body: some View {
@@ -211,13 +228,18 @@ struct TrackerDetailView: View {
             EditEntryView(entry: entry, tracker: tracker)
                 .onDisappear { refreshID = UUID() }
         }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                refreshID = UUID()
+            }
+        }
     }
 
     @ViewBuilder
     private var chartView: some View {
-        let entries = filteredEntries.sorted { $0.date < $1.date }
         switch tracker.type {
         case .scale:
+            let entries = filteredEntries.sorted { $0.date < $1.date }
             Chart(entries) { entry in
                 LineMark(
                     x: .value("Date", entry.date),
@@ -233,21 +255,35 @@ struct TrackerDetailView: View {
             .chartYScale(domain: tracker.scaleMin...tracker.scaleMax)
 
         case .yesNo:
-            Chart(entries) { entry in
+            let aggregates = dailyAggregates
+            Chart(aggregates) { agg in
                 BarMark(
-                    x: .value("Date", entry.date, unit: .day),
+                    x: .value("Date", agg.date, unit: .day),
                     y: .value("Value", 1)
                 )
-                .foregroundStyle(entry.value >= 1 ? Color.green : Color.red.opacity(0.5))
+                .foregroundStyle(agg.value >= 1 ? Color.green : Color.red.opacity(0.5))
             }
 
         case .count:
-            Chart(entries) { entry in
+            let aggregates = dailyAggregates
+            let maxVal = max(1, Int(aggregates.map(\.value).max() ?? 1))
+            Chart(aggregates) { agg in
                 BarMark(
-                    x: .value("Date", entry.date, unit: .day),
-                    y: .value("Value", entry.value)
+                    x: .value("Date", agg.date, unit: .day),
+                    y: .value("Count", Int(agg.value))
                 )
                 .foregroundStyle(Color(hex: tracker.colorHex).gradient)
+            }
+            .chartYScale(domain: 0...maxVal)
+            .chartYAxis {
+                AxisMarks(values: .stride(by: max(1, Double(maxVal / 5)))) { value in
+                    AxisGridLine()
+                    AxisValueLabel {
+                        if let v = value.as(Int.self) {
+                            Text("\(v)")
+                        }
+                    }
+                }
             }
         }
     }
